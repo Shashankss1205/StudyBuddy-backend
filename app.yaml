@@ -1,0 +1,22 @@
+runtime: python39
+instance_class: F2
+
+entrypoint: gunicorn -b :$PORT app:app
+
+env_variables:
+  GOOGLE_APPLICATION_CREDENTIALS: "keys/gcs-key.json"
+  GCS_BUCKET_NAME: "studybuddy-pdf-storage"
+  GEMINI_API_KEY: ""  # Set your Gemini API key for the deployed application
+  FLASK_ENV: "production"
+
+handlers:
+- url: /.*
+  script: auto
+  secure: always
+
+automatic_scaling:
+  min_idle_instances: 0
+  max_idle_instances: 1  
+  min_pending_latency: 300ms  
+  max_pending_latency: 1000ms
+  max_instances: 5 
